@@ -125,9 +125,13 @@ This document describes the stored procedures available in the **SteemSQL** data
 - **Purpose**: Calculates value for beneficiary rewards.
 - **Depends on**: `posts`, `curation_rewards`, `steem_price_history`
 
+### `update_pending_post_percentiles_values`
+
+- **Purpose**: update the `total_value` field in the `pending_post_percentiles`. This update will trigger the `update_post_values_and_percentiles` procedure to update the posts table.
+
 ### `update_post_values_and_percentiles`
 
-- **Purpose**: Fills in `total_value` and `percentile` in `posts` from `pending_post_percentiles`.
+- **Purpose**: Fills in `total_value` and `percentile` in `posts` from `pending_post_percentiles` Once all of the posts from a given day have been inserted.
 - **Notes**: Uses `PERCENT_RANK()` over daily posts.
 
 ---
