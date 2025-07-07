@@ -1,6 +1,6 @@
 # 📊 Steem Curation AI
 
-**Steem Curation AI** is a full-stack data pipeline and analytics system for tracking, evaluating, and modeling curation data on the [Steem blockchain](https://steem.io). This project combines SQL database design, Python data ingestion, and reward calculation to support intelligent curation strategies and in-depth post analysis.
+**Steem Curation AI** is a data pipeline and analytics system for ingesting, evaluating, and modeling curation data on the [Steem blockchain](https://steem.io). This project combines SQL database design, Python data ingestion, and reward calculation to support intelligent curation strategies and in-depth post analysis.
 
 ## 🔧 Project Structure
 
