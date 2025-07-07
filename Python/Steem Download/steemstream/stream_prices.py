@@ -108,7 +108,7 @@ def stream_prices(time_to_wait: int = 30) -> None:
     :return: None
     """
     streaming = True
-    user, password = get_user_pass(r"D:\Python\Steem Download\config\database_config.ini")
+    user, password = get_user_pass(r"D:\Steem Curation AI Project\config.ini")
     ssql = SteemSQL(user, password, 'SteemSQL')
     ssql.connect()
     while streaming:
@@ -129,7 +129,3 @@ def stream_prices(time_to_wait: int = 30) -> None:
                     t.sleep(10)
         print(f'Sleeping for {time_to_wait} minutes')
         t.sleep(time_to_wait * 60)
-
-# === Script Entry Point ===
-if __name__ == "__main__":
-    stream_prices()

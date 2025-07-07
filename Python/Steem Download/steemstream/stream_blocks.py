@@ -91,7 +91,7 @@ def stream_data(start_block:int, s:Steem, blockchain:Blockchain, records_to_inse
     :param records_to_insert:
     :return:
     """
-    user, password = get_user_pass(r"D:\Python\Steem Download\config\database_config.ini")
+    user, password = get_user_pass(r"D:\Steem Curation AI Project\config.ini")
     ssql = SteemSQL(user, password, 'SteemSQL')
     ssql.connect()
     accounts_in_db = ssql.get('get_account_usernames')
