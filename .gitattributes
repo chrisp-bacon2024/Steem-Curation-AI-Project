@@ -1,5 +1,5 @@
-# Force SQL recognition
-*.sql linguist-language=SQL
+# SQL is non-documentation
+*.sql linguist-documentation=false
 
 # Ignore data exports or test artifacts
 *.csv linguist-documentation
