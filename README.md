@@ -95,7 +95,7 @@ Steem-Curation-AI-Project/
 5. Run the Python ingestion pipeline:
 
    ```bash
-   python Python/main.py
+   python Python/Steem Download/main.py
    ```
 
 ## 📖 Documentation
