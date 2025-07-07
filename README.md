@@ -81,7 +81,6 @@ Steem-Curation-AI-Project/
 3. Install Python dependencies:
    - It's recommended to use a virtual environment
    - Install required packages using:
-   - 
    ```bash
    pip install -r requirements.txt
    ```
