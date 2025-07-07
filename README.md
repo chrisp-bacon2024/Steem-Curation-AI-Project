@@ -79,12 +79,20 @@ Steem-Curation-AI-Project/
    - Run the SQL files in `MySQL/SteemSQL/schema/` using MySQL Workbench or CLI
    - Make sure you have MySQL 8.x installed
 
-3. Configure your credentials:
+3. Install Python dependencies:
+   - It's recommended to use a virtual environment
+   - Install required packages using:
+   - 
+   ```bash
+   pip install -r requirements.txt
+   ```
+   
+4. Configure your credentials:
 
    - Create a `config.ini` file (see `config_sample.ini` for format)
    - Update `CONFIG_PATH` to `config.ini` in `main.py`
 
-4. Run the Python ingestion pipeline:
+5. Run the Python ingestion pipeline:
 
    ```bash
    python Python/main.py
