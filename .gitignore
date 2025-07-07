@@ -30,7 +30,7 @@ Thumbs.db
 *~
 
 # --- Python ---
-Python/Steem Download/config/database_config.ini
+config.ini
 Python/Steem Download/data/*
 __pycache__/
 *.py[cod]
