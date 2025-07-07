@@ -96,6 +96,53 @@ BEGIN
 END $$
 DELIMITER ;
 
+-- Procedure: update_pending_post_percentiles_values
+-- Purpose: Updates the total_value field of the pending_post_percentiles table
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS update_pending_post_percentiles_values;
+CREATE PROCEDURE update_pending_post_percentiles_values(IN updates_json JSON)
+BEGIN
+	DECLARE i INT DEFAULT 0;
+    DECLARE total_entries INT;
+    
+    -- Temporary vars
+    DECLARE v_author VARCHAR(16);
+    DECLARE v_permlink VARCHAR(256);
+    DECLARE v_total_value DECIMAL(10,2);
+    DECLARE v_created DATETIME;
+    
+    -- Get number of entries
+    SET total_entries = JSON_LENGTH(updates_json);
+    
+    DROP TEMPORARY TABLE IF EXISTS temp_post_updates;
+    CREATE TEMPORARY TABLE temp_post_updates (
+        author VARCHAR(16),
+        permlink VARCHAR(256),
+        total_value DECIMAL(10,2)
+    );
+
+    WHILE i < total_entries DO
+        -- Extract values from JSON
+        SET v_author = JSON_UNQUOTE(JSON_EXTRACT(updates_json, CONCAT('$[', i, '].author')));
+        SET v_permlink = JSON_UNQUOTE(JSON_EXTRACT(updates_json, CONCAT('$[', i, '].permlink')));
+        SET v_total_value = JSON_EXTRACT(updates_json, CONCAT('$[', i, '].total_value'));
+        
+        INSERT INTO temp_post_updates (author, permlink, total_value) 
+        VALUES (v_author, v_permlink, v_total_value);
+
+        SET i = i + 1;
+    END WHILE;
+    UPDATE pending_post_percentiles p
+    JOIN temp_post_updates t
+    ON p.author = t.author AND p.permlink = t.permlink
+    SET p.total_value = t.total_value;
+    
+END $$
+
+DELIMITER ;
+
 -- Procedure: update_post_values_and_percentiles
 -- Purpose: Fills in `total_value` and `percentile` in the `posts` table using values from `pending_post_percentiles` and rank logic.
 
