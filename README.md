@@ -10,8 +10,9 @@ Steem-Curation-AI-Project/
 ├── MySQL/
 │   └── SteemSQL/
 │       ├── schema/
+│       │   ├── create_database.sql
 │       │   ├── create_tables.sql
-│       │   ├── create_triggers.sql
+|       |   ├── create_triggers.sql
 │       │   └── Procedures/
 │       │       ├── Insertion/
 │       │       ├── create_update_procedures.sql
@@ -24,8 +25,6 @@ Steem-Curation-AI-Project/
 │
 ├── Python/
 │   └── Steem Download/
-│       ├── config/
-|       |   └── database_config.ini (gitignored)
 │       ├── data/
 │       |   └── ...
 |       ├── SteemSQL/
@@ -42,6 +41,7 @@ Steem-Curation-AI-Project/
 |       |   └── time.py
 |       └── main.py
 │
+└── config.ini (gitignored)
 └── README.md
 ```
 
@@ -82,6 +82,7 @@ Steem-Curation-AI-Project/
 3. Configure your credentials:
 
    - Create a `config.ini` file (see `config_sample.ini` for format)
+   - Update `CONFIG_PATH` to `config.ini` in `main.py`
 
 4. Run the Python ingestion pipeline:
 
@@ -98,4 +99,7 @@ Steem-Curation-AI-Project/
 ## 📝 License
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+## 🧭 Future Plans
+The first stage of this project, building what is necessary for *data collection*, is completed. The next stage will be data exploration and model selection. The final stage will be implementation of the model(s) for real world curation, and analysis of the model(s) performance. 
 
