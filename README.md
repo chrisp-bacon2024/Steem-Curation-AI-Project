@@ -51,10 +51,10 @@ Steem-Curation-AI-Project/
 - ✅ Modular **stored procedures** for insertion, updates, and analytics
 - ✅ Triggers for live updates on reward and percentile data
 - ✅ Python scripts for:
-  - Pulling post, vote, and reward data from the Steem blockchain
+  - Pulling account, post, vote, and reward data from the Steem blockchain
+  - Retrieving follower data from the Steem World API
   - Performing language analysis and text metrics
-  - Logging historic curation and author performance
-- ✅ Integrated with historic **Steem price** data to compute post value in USD
+- ✅ Integrated with historic **Steem price** data to compute post value in Steem (at the time of payout)
 
 ## 🧱 Technologies Used
 
@@ -101,5 +101,10 @@ Steem-Curation-AI-Project/
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ## 🧭 Future Plans
-The first stage of this project, building what is necessary for *data collection*, is completed. The next stage will be data exploration and model selection. The final stage will be implementation of the model(s) for real world curation, and analysis of the model(s) performance. 
+### Stage 1: Data Collection
+The first stage of this project, building what is necessary for *data collection*, is completed. That being said, it will definitely take a while to collect all of the data. I estimate that it will take between 2 and 3 months to collect a year's worth of data.
+### Stage 2: Data Exploration and Model Selection
+Once a good amount of data is collected, the next stage will be data exploration and model selection. I have a rough idea of the kind of models that will do well at this task (from my first attempt at this two years ago), but this project incorporates a lot more data, and therefore different types of models may excel. The only way to find out is to explore the variety of options.
+### Stage 3: Real World Implementation and Curation Analysis
+After I have selected a model, I will begin to have it vote in real time on posts and analyze its performance on real world data.
 
