@@ -124,6 +124,10 @@ BEGIN
             WHERE DATE(created) >= min_created AND DATE(created) < max_created
         ) ranked ON p.author = ranked.author AND p.permlink = ranked.permlink
         SET p.total_value = ranked.total_value, p.percentile = ranked.percentile;
+        
+        -- Delete processed rows from pending_post_percentiles
+        DELETE FROM pending_post_percentiles
+        WHERE DATE(created) >= min_created AND DATE(created) < max_created;
     END IF;
 END $$
 DELIMITER ;
