@@ -1,158 +1,100 @@
-# SteemSQL Database Documentation
+# 📊 Steem Curation AI
 
-This document outlines the structure, procedures, and triggers used in the **SteemSQL** database for managing and analyzing content, votes, rewards, and historical metrics on the Steem blockchain.
+**Steem Curation AI** is a full-stack data pipeline and analytics system for tracking, evaluating, and modeling curation behavior on the [Steem blockchain](https://steem.io). This project combines SQL database design, Python data ingestion, and reward calculation to support intelligent curation strategies and in-depth post analysis.
 
----
+## 🔧 Project Structure
 
-## Table of Contents
+```
+Steem-Curation-AI-Project/
+│
+├── MySQL/
+│   └── SteemSQL/
+│       ├── schema/
+│       │   ├── create_tables.sql
+│       │   ├── create_triggers.sql
+│       │   └── Procedures/
+│       │       ├── Insertion/
+│       │       ├── create_update_procedures.sql
+│       │       └── create_utility_procedures.sql
+│       │       
+│       └── docs/
+│           ├── schema.md
+│           ├── procedures.md
+|           └── triggers.md
+│
+├── Python/
+│   └── Steem Download/
+│       ├── config/
+|       |   └── database_config.ini (gitignored)
+│       ├── data/
+│       |   └── ...
+|       ├── SteemSQL/
+|       |   └── connection.py
+|       ├── steemstream
+|       |   ├── process/...
+|       |   ├── account.py
+|       |   ├── stream_blocks.py
+|       |   └── stream_prices.py
+|       └── steemutils
+|       |   ├── block_lookup.py
+|       |   ├── language.py
+|       |   ├── markdown_analysis.py
+|       |   └── time.py
+|       └── main.py
+│
+└── README.md
+```
 
-1. [Tables](#tables)
-2. [Stored Procedures](#stored-procedures)
-3. [Triggers](#triggers)
+## 📚 Features
 
----
+- ✅ Full **MySQL schema** with referential integrity
+- ✅ Modular **stored procedures** for insertion, updates, and analytics
+- ✅ Triggers for live updates on reward and percentile data
+- ✅ Python scripts for:
+  - Pulling post, vote, and reward data from the Steem blockchain
+  - Performing language analysis and text metrics
+  - Logging historic curation and author performance
+- ✅ Integrated with historic **Steem price** data to compute post value in USD
 
-## Tables
+## 🧱 Technologies Used
 
-### 1. `steem_price_history`
-- **Purpose**: Stores daily historical STEEM prices.
-- **Columns**: `date`, `open`, `high`, `low`, `close`, `volume`
+- **Steem** – Decentralized blockchain platform for content and rewards
 
-### 2. `accounts`
-- **Purpose**: Holds metadata for user accounts.
-- **Columns**: `username`, `date_created`
+* **MySQL** – Relational database schema and stored procedures
+* **Python** – Data ingestion and analysis
+* **BeautifulSoup / langdetect / enchant** – For text and language processing
+* **GitHub** – Version control and collaboration
 
-### 3. `posts`
-- **Purpose**: Metadata for each post.
-- **Depends on**: `accounts`
-- **Columns**: `author`, `permlink`, `created`, `category`, `total_value`, `percentile`
+## 🚀 Getting Started
 
-### 4. `pending_post_percentiles`
-- **Purpose**: Posts pending percentile calculation.
-- **Columns**: `author`, `permlink`, `total_value`, `created`
+1. Clone the repo:
 
-### 5. `bodies`
-- **Purpose**: Content and structure of post edits.
-- **Columns**: Author, permlink, created, title, body, counts (words, sentences, etc.), followers
+   ```bash
+   git clone https://github.com/chrisp-bacon2024/Steem-Curation-AI-Project.git
+   cd Steem-Curation-AI-Project
+   ```
 
-### 6. `languages`
-- **Purpose**: Language metrics for each body version.
-- **Columns**: Language code, spelling errors, etc.
+2. Set up your database:
 
-### 7. `tags`
-- **Purpose**: Tags for each body version.
+   - Run the SQL files in `MySQL/SteemSQL/schema/` using MySQL Workbench or CLI
+   - Make sure you have MySQL 8.x installed
 
-### 8. `beneficiaries`
-- **Purpose**: Declares beneficiaries and their reward percentage.
+3. Configure your credentials:
 
-### 9. `votes`
-- **Purpose**: Records user votes on posts.
-- **Columns**: `author`, `permlink`, `voter`, `time`, `weight`, `rshares`
+   - Create a `config.ini` file (see `config_sample.ini` for format)
 
-### 10. `author_rewards`
-- **Purpose**: Reward data for post authors.
+4. Run the Python ingestion pipeline:
 
-### 11. `curation_rewards`
-- **Purpose**: Reward data for curators (voters).
+   ```bash
+   python Python/main.py
+   ```
 
-### 12. `beneficiary_rewards`
-- **Purpose**: Reward data for post beneficiaries.
+## 📖 Documentation
 
-### 13. `author_percentile_history`
-- **Purpose**: Tracks author's performance over time.
+- 📄[Schema Documentation]\()
+- ⚙️ [Procedure Documentation]\([https://github.com/chrisp-bacon2024/Steem-Curation-AI-Project/blob/main/MySQL/docs/procedures.md](https://github.com/chrisp-bacon2024/Steem-Curation-AI-Project/blob/main/MySQL/docs/procedures.md))
 
-### 14. `voter_curation_history`
-- **Purpose**: Tracks voter efficiency over time windows.
+## 📝 License
 
-### 15. `pending_vote_history`
-- **Purpose**: Queues votes awaiting history calculation.
-
-### 16. `comments`
-- **Purpose**: Tracks post comments.
-
-### 17. `resteems`
-- **Purpose**: Tracks resteems (reblogs) of posts.
-
-### 18. `vote_batch_log`
-- **Purpose**: Logs batches of vote inserts to trigger processing.
-
----
-
-## Stored Procedures
-
-Stored procedures are grouped based on function:
-
-### A. **Foundation Insertion**
-- `insert_accounts`
-- `insert_steem_price_history`
-
-### B. **Content Insertion**
-- `insert_posts`
-- `insert_bodies`
-- `insert_languages`
-- `insert_tags`
-
-### C. **Social Insertion**
-- `insert_votes`
-- `insert_comments`
-- `insert_resteems`
-- `insert_beneficiaries`
-
-### D. **Reward Insertion**
-- `insert_author_rewards`
-- `insert_curation_rewards`
-- `insert_beneficiary_rewards`
-
-### E. **History Insertion**
-- `insert_author_percentile_history`
-
-### F. **Update Procedures**
-- `update_value_and_steem_for_author_rewards`
-- `update_value_and_steem_for_curation_rewards`
-- `update_value_and_steem_for_beneficiary_rewards`
-- `update_post_values_and_percentiles`
-
-### G. **Utility Procedures**
-- `get_missing_price_dates`
-- `get_steem_price_on_date`
-- `get_steem_prices`
-- `calculate_efficiency_stats`
-- `populate_voter_curation_history`
-
----
-
-## Triggers
-
-### 1. `after_pending_post_percentiles_update`
-- **Table**: `pending_post_percentiles`
-- **Purpose**: Updates post `total_value` and `percentile`.
-
-### 2. `after_post_insert`
-- **Table**: `posts`
-- **Purpose**: Automatically records historical author stats across several time windows.
-
-### 3. `after_vote_batch_insert`
-- **Table**: `vote_batch_log`
-- **Purpose**: Automatically populates `voter_curation_history` from `pending_vote_history`.
-
----
-
-## Summary
-
-This schema enables detailed tracking and analytics for Steem blockchain activity, including post content, language, tags, rewards, vote efficiency, and beneficiary distribution. It uses:
-- Composite keys for data integrity
-- Temp tables for safe bulk inserts
-- Post-processing triggers for maintaining historical consistency
-
----
-
-## License
-MIT
-
-## Author
-Christopher Palmer
-
----
-
-To contribute or explore more, visit the [GitHub repository](https://github.com/chrisp-bacon2024/Steem-Curation-AI-Project).
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
