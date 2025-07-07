@@ -139,6 +139,10 @@ BEGIN
     ON p.author = t.author AND p.permlink = t.permlink
     SET p.total_value = t.total_value;
     
+    UPDATE posts p
+    JOIN temp_post_updates t
+    ON p.author = t.author AND p.permlink = t.permlink
+    SET p.total_value = t.total_value;
 END $$
 
 DELIMITER ;
