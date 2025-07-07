@@ -1,1 +1,6 @@
+# Force SQL recognition
 *.sql linguist-language=SQL
+
+# Ignore data exports or test artifacts
+*.csv linguist-documentation
+/test/** linguist-generated
