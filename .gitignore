@@ -1,0 +1,42 @@
+# --- MySQL Workbench-specific ---
+# Ignore Workbench's user-specific settings/cache
+*.mwb.bak
+*.mwb~
+*.bak
+*.log
+
+# --- General SQL files to ignore ---
+# Ignore generated dumps and backups
+*.sql~
+*.sql.bak
+*.dump
+*.sql.gz
+
+# But keep actual SQL scripts
+!*.sql
+
+# --- System files ---
+.DS_Store
+Thumbs.db
+
+# --- Editors/IDEs ---
+.vscode/
+.idea/
+*.code-workspace
+
+# --- Temp files ---
+*.tmp
+*.swp
+*~
+
+# --- Python ---
+Python/Steem Download/config/database_config.ini
+Python/Steem Download/data/*
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+*.env
+*.venv
+env/
+venv/
