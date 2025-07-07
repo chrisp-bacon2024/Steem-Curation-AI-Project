@@ -91,7 +91,7 @@ def get_missing_prices(ssql: SteemSQL) -> None:
             print(f"No data found for {reward_date}")
 
 
-def stream_prices(time_to_wait: int = 30) -> None:
+def stream_prices(time_to_wait: int = 30, config_path:str='') -> None:
     """
     Starts a continuous loop that regularly checks and inserts missing STEEM price data.
 
@@ -105,10 +105,11 @@ def stream_prices(time_to_wait: int = 30) -> None:
 
 
     :param time_to_wait: Number of minutes to wait between updates. Defaults to 30 minutes.
+    :param config_path: Path to config file
     :return: None
     """
     streaming = True
-    user, password = get_user_pass(r"D:\Steem Curation AI Project\config.ini")
+    user, password = get_user_pass(config_path)
     ssql = SteemSQL(user, password, 'SteemSQL')
     ssql.connect()
     while streaming:

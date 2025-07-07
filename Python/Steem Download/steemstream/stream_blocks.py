@@ -78,20 +78,21 @@ def insert_data(data_to_insert:dict[str, list], db:SteemSQL, most_recent_block:i
         return True
     return False
 
-def stream_data(start_block:int, s:Steem, blockchain:Blockchain, records_to_insert:int=1000):
+def stream_data(start_block:int, s:Steem, blockchain:Blockchain, records_to_insert:int=1000, config_path:str=''):
     """
     Streams Steem blockchain operations starting from a given block and collects structured data for insertion.
 
     This function monitors blockchain activity in real-time (or from a starting block) and extracts
     relevant operations including posts, votes, rewards, resteems, and metadata. It aggregates these
     into categorized lists and periodically prepares them for database insertion.
-    :param start_block:
-    :param s:
-    :param blockchain:
-    :param records_to_insert:
+    :param start_block: block to start at
+    :param s: Steem instance
+    :param blockchain: Blockchain instance
+    :param records_to_insert: Number of records to do an insert
+    :param config_path: Path to config file
     :return:
     """
-    user, password = get_user_pass(r"D:\Steem Curation AI Project\config.ini")
+    user, password = get_user_pass(config_path)
     ssql = SteemSQL(user, password, 'SteemSQL')
     ssql.connect()
     accounts_in_db = ssql.get('get_account_usernames')
