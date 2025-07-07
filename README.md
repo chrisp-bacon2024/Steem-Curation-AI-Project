@@ -102,10 +102,6 @@ Steem-Curation-AI-Project/
 - ⚙️ [Procedure Documentation](https://github.com/chrisp-bacon2024/Steem-Curation-AI-Project/blob/main/MySQL/docs/procedures.md)
 - 🧨 [Trigger Documentation](https://github.com/chrisp-bacon2024/Steem-Curation-AI-Project/blob/main/MySQL/docs/trigger.md)
 
-## 📝 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
 ## 🧭 Future Plans
 ### Stage 1: Data Ingestion
 The first stage of this project, building what is necessary for *data ingestion*, is completed. That being said, it will definitely take a while to collect all of the data. I estimate that it will take between 2 and 3 months to collect 1.5 years of data.
@@ -114,3 +110,6 @@ Once a good amount of data is collected, the next stage will be data exploration
 ### Stage 3: Real World Implementation and Curation Analysis
 After I have selected a model, I will begin to have it vote in real time on posts and analyze its performance on real world data. Previous models with less correlated features performed fairly well. My hope is that with the new features I've added, models will perform even better on real world data!
 
+## 📝 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
