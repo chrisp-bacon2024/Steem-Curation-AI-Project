@@ -51,10 +51,10 @@ Steem-Curation-AI-Project/
 - ✅ Modular **stored procedures** for insertion, updates, and analytics
 - ✅ Triggers for live updates on reward and percentile data
 - ✅ Python scripts for:
-  - Pulling post, vote, and reward data from the Steem blockchain
+  - Pulling account, post, vote, and reward data from the Steem blockchain
+  - Retrieving follower data from the Steem World API
   - Performing language analysis and text metrics
-  - Logging historic curation and author performance
-- ✅ Integrated with historic **Steem price** data to compute post value in USD
+- ✅ Integrated with historic **Steem price** data to compute post value in Steem (at the time of payout)
 
 ## 🧱 Technologies Used
 
