@@ -58,11 +58,10 @@ Steem-Curation-AI-Project/
 
 ## 🧱 Technologies Used
 
-- **Steem** – Decentralized blockchain platform for content and rewards
-
-* **MySQL** – Relational database schema and stored procedures
+* **Steem Python Library** – Python interface for accessing the Steem blockchain API and performing account, post, vote, and reward operations
 * **Python** – Data ingestion and analysis
 * **BeautifulSoup / langdetect / enchant** – For text and language processing
+* **MySQL** – Relational database schema, stored procedures, and event driven logic
 * **GitHub** – Version control and collaboration
 
 ## 🚀 Getting Started
@@ -109,10 +108,10 @@ Steem-Curation-AI-Project/
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ## 🧭 Future Plans
-### Stage 1: Data Collection
-The first stage of this project, building what is necessary for *data collection*, is completed. That being said, it will definitely take a while to collect all of the data. I estimate that it will take between 2 and 3 months to collect a year's worth of data.
+### Stage 1: Data Ingestion
+The first stage of this project, building what is necessary for *data ingestion*, is completed. That being said, it will definitely take a while to collect all of the data. I estimate that it will take between 2 and 3 months to collect 1.5 years of data.
 ### Stage 2: Data Exploration and Model Selection
-Once a good amount of data is collected, the next stage will be data exploration and model selection. I have a rough idea of the kind of models that will do well at this task (from my first attempt at this two years ago), but this project incorporates a lot more data, and therefore different types of models may excel. The only way to find out is to explore the variety of options.
+Once a good amount of data is collected, the next stage will be data exploration and model selection. I have a rough idea of the kind of models that will do well at this task (from my first attempt at this three years ago), but this project incorporates a lot more data features, and therefore different types of models may excel. The only way to find out is to explore the variety of options.
 ### Stage 3: Real World Implementation and Curation Analysis
-After I have selected a model, I will begin to have it vote in real time on posts and analyze its performance on real world data.
+After I have selected a model, I will begin to have it vote in real time on posts and analyze its performance on real world data. Previous models with less correlated features performed fairly well. My hope is that with the new features I've added, models will perform even better on real world data!
 
