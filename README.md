@@ -91,8 +91,9 @@ Steem-Curation-AI-Project/
 
 ## 📖 Documentation
 
-- 📄[Schema Documentation]\()
-- ⚙️ [Procedure Documentation]\([https://github.com/chrisp-bacon2024/Steem-Curation-AI-Project/blob/main/MySQL/docs/procedures.md](https://github.com/chrisp-bacon2024/Steem-Curation-AI-Project/blob/main/MySQL/docs/procedures.md))
+- 📄[Schema Documentation](https://github.com/chrisp-bacon2024/Steem-Curation-AI-Project/blob/main/MySQL/docs/schema.md)
+- ⚙️ [Procedure Documentation](https://github.com/chrisp-bacon2024/Steem-Curation-AI-Project/blob/main/MySQL/docs/procedures.md)
+- 🧨 [Trigger Documentation](https://github.com/chrisp-bacon2024/Steem-Curation-AI-Project/blob/main/MySQL/docs/trigger.md)
 
 ## 📝 License
 
