@@ -154,5 +154,5 @@ Christopher Palmer
 
 ---
 
-To contribute or explore more, visit the [GitHub repository](https://github.com/your-repo-here).
+To contribute or explore more, visit the [GitHub repository](https://github.com/chrisp-bacon2024/Steem-Curation-AI-Project).
 
