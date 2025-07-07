@@ -1,4 +1,5 @@
 from steemstream.stream_blocks import stream_data
+from steemstream.stream_prices import stream_prices
 from steemutils.block_lookup import find_first_block_on_date
 from datetime import datetime, timedelta, timezone
 from steem import Steem
@@ -6,14 +7,19 @@ from steem.blockchain import Blockchain
 from steembase.exceptions import RPCError
 from time import sleep
 
-if __name__ == '__main__':
-    s = Steem()
-    blck = Blockchain()
-    #target_date = datetime.now(timezone.utc) - timedelta(days=409)
-    #block_num = find_first_block_on_date(target_date, s, blck)
-    with open(r"data\most_recent_block_inserted", "r") as f:
-        first_line = f.readline()
-        block_num = int(first_line.strip())
+import threading
+
+def start_block_stream(most_recent:bool=False, nodes:list=None):
+    s = Steem(nodes=nodes)
+    blck = Blockchain(s)
+    if most_recent:
+        with open(r"data\most_recent_block_inserted", "r") as f:
+            first_line = f.readline()
+            block_num = int(first_line.strip())
+    else:
+        target_date = datetime.now(timezone.utc) - timedelta(days=409)
+        block_num = find_first_block_on_date(target_date, s, blck)
+
     trying = True
     attempts = 0
     while trying:
@@ -32,3 +38,15 @@ if __name__ == '__main__':
                 attempts += 1
                 sleep(1)
                 trying = True
+
+
+
+if __name__ == '__main__':
+    block_thread = threading.Thread(target=start_block_stream, kwargs={'most_recent':True}, name='BlockStreamThread')
+    price_thread = threading.Thread(target=stream_prices, kwargs={'time_to_wait': 30})
+
+    block_thread.start()
+    price_thread.start()
+
+    block_thread.join()
+    price_thread.join()
