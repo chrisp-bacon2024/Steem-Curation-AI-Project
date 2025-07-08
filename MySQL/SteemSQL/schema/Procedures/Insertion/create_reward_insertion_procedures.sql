@@ -266,3 +266,60 @@ BEGIN
     CALL update_value_and_steem_for_beneficiary_rewards();
 END $$
 DELIMITER ;
+
+-- Procedure: insert_pending_post_percentiles_values
+-- Purpose: Inserts post total values into pending table for percentile calculation (once a full day has been inserted)
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS insert_pending_post_percentiles_values;
+CREATE PROCEDURE insert_pending_post_percentiles_values(IN updates_json JSON)
+BEGIN
+	DECLARE i INT DEFAULT 0;
+    DECLARE total_entries INT;
+    
+    -- Temporary vars
+    DECLARE v_author VARCHAR(16);
+    DECLARE v_permlink VARCHAR(256);
+    DECLARE v_total_value DECIMAL(10,2);
+    DECLARE v_created DATETIME;
+    
+    -- Get number of entries
+    SET total_entries = JSON_LENGTH(updates_json);
+    
+    DROP TEMPORARY TABLE IF EXISTS temp_pending_post_percentiles;
+    CREATE TEMPORARY TABLE temp_pending_post_percentiles (
+        author VARCHAR(16),
+        permlink VARCHAR(256),
+        created DATETIME,
+        total_value DECIMAL(10,2),
+        
+        UNIQUE KEY unique_pending_post (author, permlink)
+    );
+
+    WHILE i < total_entries DO
+        -- Extract values from JSON
+        SET v_author = JSON_UNQUOTE(JSON_EXTRACT(updates_json, CONCAT('$[', i, '].author')));
+        SET v_permlink = JSON_UNQUOTE(JSON_EXTRACT(updates_json, CONCAT('$[', i, '].permlink')));
+		SET v_created = JSON_EXTRACT(updates_json, CONCAT('$[', i, '].created'));
+        SET v_total_value = JSON_EXTRACT(updates_json, CONCAT('$[', i, '].total_value'));
+        
+        INSERT IGNORE INTO temp_pending_post_percentiles (author, permlink, created, total_value) 
+        VALUES (v_author, v_permlink, v_created, v_total_value);
+
+        SET i = i + 1;
+    END WHILE;
+    
+    INSERT INTO pending_post_percentiles (author, permlink, created, total_value)
+    SELECT t.author, t.permlink, t.created, t.total_value
+    FROM temp_pending_post_percentiles t
+    LEFT JOIN pending_post_percentiles p
+		ON t.author = p.author AND t.permlink = p.permlink
+	WHERE p.author IS NULL;
+    
+    DROP TABLE temp_pending_post_percentiles;
+    
+    CALL update_post_values_and_percentiles();
+END $$
+
+DELIMITER ;

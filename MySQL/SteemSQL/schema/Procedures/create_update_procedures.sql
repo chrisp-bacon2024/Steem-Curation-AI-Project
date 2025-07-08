@@ -107,7 +107,7 @@ DELIMITER $$
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS update_post_values_and_percentiles;
-CREATE PROCEDURE update_post_values_and_percentiles ()
+CREATE PROCEDURE update_post_values_and_percentiles()
 BEGIN
     DECLARE min_created DATE;
     DECLARE max_created DATE;
