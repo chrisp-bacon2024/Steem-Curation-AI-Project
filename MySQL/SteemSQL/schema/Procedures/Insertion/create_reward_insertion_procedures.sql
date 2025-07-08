@@ -311,11 +311,12 @@ BEGIN
     END WHILE;
     
     INSERT INTO pending_post_percentiles (author, permlink, created, total_value)
-    SELECT t.author, t.permlink, t.created, t.total_value
-    FROM temp_pending_post_percentiles t
-    LEFT JOIN pending_post_percentiles p
-		ON t.author = p.author AND t.permlink = p.permlink
-	WHERE p.author IS NULL;
+	SELECT t.author, t.permlink, t.created, t.total_value
+	FROM temp_pending_post_percentiles t
+	JOIN posts p ON t.author = p.author AND t.permlink = p.permlink
+	LEFT JOIN pending_post_percentiles pp
+		ON t.author = pp.author AND t.permlink = pp.permlink
+	WHERE pp.author IS NULL;
     
     DROP TABLE temp_pending_post_percentiles;
     
