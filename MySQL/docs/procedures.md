@@ -127,7 +127,7 @@ This document describes the stored procedures available in the **SteemSQL** data
 
 ### `update_pending_post_percentiles_values`
 
-- **Purpose**: update the `total_value` field in the `pending_post_percentiles`. This update will trigger the `update_post_values_and_percentiles` procedure to update the posts table.
+- **Purpose**: update the `total_value` field in the `pending_post_percentiles` table as well as the `posts` table. This update will trigger the `update_post_values_and_percentiles` procedure to update the `percentile` value in the posts table if the whole day has been inserted.
 
 ### `update_post_values_and_percentiles`
 
