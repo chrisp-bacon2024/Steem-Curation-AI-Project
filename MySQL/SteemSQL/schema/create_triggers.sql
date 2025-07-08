@@ -1,27 +1,5 @@
 USE SteemSQL;
 
--- Trigger: after_pending_post_percentiles_update
--- Table: pending_post_percentiles
--- Timing: AFTER UPDATE
--- Purpose: When a pending post percentile is updated (e.g., total_value is filled), 
---          this trigger calls `update_post_values_and_percentiles()` to assign percentile ranks
---          to posts whose values are now available and ready. It also sets the value of the post.
---
--- Notes:
---   - The procedure will rank all posts for the relevant dates and update `percentile` and `total_value` in the `posts` table.
-
-DELIMITER $$
-
-DROP TRIGGER IF EXISTS after_pending_post_percentiles_update;
-CREATE TRIGGER after_pending_post_percentiles_update
-AFTER UPDATE ON pending_post_percentiles
-FOR EACH ROW
-BEGIN
-    CALL update_post_values_and_percentiles();
-END $$
-
-DELIMITER ;
-
 -- Trigger: after_post_insert
 -- Table: posts
 -- Timing: AFTER INSERT
