@@ -63,7 +63,7 @@ def insert_data(data_to_insert:dict[str, list], db:SteemSQL, most_recent_block:i
     if total_length >= length_to_insert:
         for i, (key, data) in enumerate(data_to_insert.items()):
             if key == 'post_values':
-                procedure = f'update_pending_post_percentiles_values'
+                procedure = f'insert_pending_post_percentiles_values'
             else:
                 procedure = f'insert_{key}'
             db.insert_multiple(procedure=procedure, to_insert = data)
