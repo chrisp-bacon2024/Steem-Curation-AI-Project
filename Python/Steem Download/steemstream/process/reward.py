@@ -274,8 +274,9 @@ def handle_curation_reward(block:Dict[str, Any], date:datetime, s:Steem, checker
         if crs_data['author'] != None:
             curation_rewards.append(crs_data)
             content = s.get_content(author, permlink)
+            created = datetime.strptime(content['created'], '%Y-%m-%dT%H:%M:%S').replace(tzinfo=timezone.utc)
             total_value = round(float(content['curator_payout_value'].replace(' SBD', '')), 2) * 2
-            post_values.append({'author': author, 'permlink': permlink, 'total_value': total_value})
+            post_values.append({'author': author, 'permlink': permlink, 'created':created, 'total_value': total_value})
         crs = CurationRewards(author, permlink, date)
 
     crs.add_reward(block, checker)
