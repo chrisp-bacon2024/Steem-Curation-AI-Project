@@ -52,14 +52,6 @@ BEGIN
     LEFT JOIN posts p ON tmp.author = p.author AND tmp.permlink = p.permlink
     WHERE p.author IS NULL
     GROUP BY tmp.author, tmp.permlink;
-    
-    INSERT INTO pending_post_percentiles(author, permlink, created)
-    SELECT tmp.author, tmp.permlink, MIN(tmp.created)
-    FROM temp_posts tmp
-    LEFT JOIN pending_post_percentiles ppp ON tmp.author = ppp.author AND tmp.permlink = ppp.permlink
-    WHERE ppp.author IS NULL
-    GROUP BY tmp.author, tmp.permlink;
-    
 
     -- Drop the temporary table after processing
     DROP TEMPORARY TABLE IF EXISTS temp_posts;
