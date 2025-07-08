@@ -101,52 +101,6 @@ DELIMITER ;
 
 DELIMITER $$
 
-DROP PROCEDURE IF EXISTS update_pending_post_percentiles_values;
-CREATE PROCEDURE update_pending_post_percentiles_values(IN updates_json JSON)
-BEGIN
-	DECLARE i INT DEFAULT 0;
-    DECLARE total_entries INT;
-    
-    -- Temporary vars
-    DECLARE v_author VARCHAR(16);
-    DECLARE v_permlink VARCHAR(256);
-    DECLARE v_total_value DECIMAL(10,2);
-    DECLARE v_created DATETIME;
-    
-    -- Get number of entries
-    SET total_entries = JSON_LENGTH(updates_json);
-    
-    DROP TEMPORARY TABLE IF EXISTS temp_post_updates;
-    CREATE TEMPORARY TABLE temp_post_updates (
-        author VARCHAR(16),
-        permlink VARCHAR(256),
-        total_value DECIMAL(10,2)
-    );
-
-    WHILE i < total_entries DO
-        -- Extract values from JSON
-        SET v_author = JSON_UNQUOTE(JSON_EXTRACT(updates_json, CONCAT('$[', i, '].author')));
-        SET v_permlink = JSON_UNQUOTE(JSON_EXTRACT(updates_json, CONCAT('$[', i, '].permlink')));
-        SET v_total_value = JSON_EXTRACT(updates_json, CONCAT('$[', i, '].total_value'));
-        
-        INSERT INTO temp_post_updates (author, permlink, total_value) 
-        VALUES (v_author, v_permlink, v_total_value);
-
-        SET i = i + 1;
-    END WHILE;
-    UPDATE pending_post_percentiles p
-    JOIN temp_post_updates t
-    ON p.author = t.author AND p.permlink = t.permlink
-    SET p.total_value = t.total_value;
-    
-    UPDATE posts p
-    JOIN temp_post_updates t
-    ON p.author = t.author AND p.permlink = t.permlink
-    SET p.total_value = t.total_value;
-END $$
-
-DELIMITER ;
-
 -- Procedure: update_post_values_and_percentiles
 -- Purpose: Fills in `total_value` and `percentile` in the `posts` table using values from `pending_post_percentiles` and rank logic.
 
@@ -164,14 +118,27 @@ BEGIN
     INTO 
         min_created, 
         max_created
-    FROM pending_post_percentiles;
+    FROM pending_post_percentiles p;
 
     IF min_created < max_created THEN
+		-- Create a temporary table for collecting all posts
+        DROP TEMPORARY TABLE IF EXISTS temp_post_joined;
+        CREATE TEMPORARY TABLE temp_post_joined AS
+		SELECT 
+            p.author,
+            p.permlink,
+            p.created,
+            IFNULL(ppp.total_value, 0) AS total_value -- Posts not in pending did not pay out and are therefore 0 dollars
+		FROM posts p
+        LEFT JOIN pending_post_percentiles ppp
+			ON p.author = ppp.author AND p.permlink = ppp.permlink
+		WHERE DATE(p.created) >= min_created AND DATE(p.created) < max_created;
+    
         -- Update all percentiles for posts on each date from min_created to max_created - 1
         UPDATE posts p
         JOIN (
             SELECT author, permlink, total_value, FLOOR(PERCENT_RANK() OVER (PARTITION BY DATE(created) ORDER BY total_value) * 100) AS percentile
-            FROM pending_post_percentiles
+            FROM temp_post_joined
             WHERE DATE(created) >= min_created AND DATE(created) < max_created
         ) ranked ON p.author = ranked.author AND p.permlink = ranked.permlink
         SET p.total_value = ranked.total_value, p.percentile = ranked.percentile;
