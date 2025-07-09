@@ -53,10 +53,13 @@ BEGIN
                 ORDER BY rn
                 LIMIT 1
             ), 0)
-        FROM posts
+        FROM posts p
+        LEFT JOIN author_percentile_history h
+        ON h.author = v_author AND h.permlink=v_permlink AND h.days = window_days
         WHERE author = v_author
           AND created BETWEEN from_date AND v_created
-          AND percentile IS NOT NULL;
+          AND percentile IS NOT NULL
+          AND h.author IS NULL;
 
         SET i = i + 1;
     END WHILE;
