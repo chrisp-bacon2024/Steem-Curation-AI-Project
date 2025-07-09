@@ -153,34 +153,26 @@ def stream_data(start_block:int, s:Steem, blockchain:Blockchain, records_to_inse
 
         attempts = 0
         trying = True
-        block_check = int(block['block_num']) < 84763551
+
         while trying:
             try:
-                if block_check:
-                    if b_type == 'vote':
-                        ps.handle_vote(block, date, s, checker, votes)
-                    elif b_type == 'curation_reward':
-                        crs = pr.handle_curation_reward(block, date, s, checker, crs, post_values, curation_rewards)
-                    elif b_type == 'comment_benefactor_reward':
-                        brs = pr.handle_beneficiary_reward(block, date, checker, brs, beneficiary_rewards)
-                else:
-                    if b_type == 'comment':
-                        if block['parent_author'] == '':
-                            pp.handle_post(block, date, s, checker, posts, bodies, body_languages, body_tags)
-                        else:
-                            pp.handle_comment(block, date, s, checker, comments)
-                    elif b_type == 'comment_options':
-                        pp.handle_beneficiary(block, checker, beneficiaries)
-                    elif b_type == 'custom_json':
-                        ps.handle_resteem(block, date, checker, resteems)
-                    elif b_type == 'vote':
-                        ps.handle_vote(block, date, s, checker, votes)
-                    elif b_type == 'author_reward':
-                        pr.handle_author_reward(block, date, checker, author_rewards)
-                    elif b_type == 'curation_reward':
-                        crs = pr.handle_curation_reward(block, date, s, checker, crs, post_values, curation_rewards)
-                    elif b_type == 'comment_benefactor_reward':
-                        brs = pr.handle_beneficiary_reward(block, date, checker, brs, beneficiary_rewards)
+                if b_type == 'comment':
+                    if block['parent_author'] == '':
+                        pp.handle_post(block, date, s, checker, posts, bodies, body_languages, body_tags)
+                    else:
+                        pp.handle_comment(block, date, s, checker, comments)
+                elif b_type == 'comment_options':
+                    pp.handle_beneficiary(block, checker, beneficiaries)
+                elif b_type == 'custom_json':
+                    ps.handle_resteem(block, date, checker, resteems)
+                elif b_type == 'vote':
+                    ps.handle_vote(block, date, s, checker, votes)
+                elif b_type == 'author_reward':
+                    pr.handle_author_reward(block, date, checker, author_rewards)
+                elif b_type == 'curation_reward':
+                    crs = pr.handle_curation_reward(block, date, s, checker, crs, post_values, curation_rewards)
+                elif b_type == 'comment_benefactor_reward':
+                    brs = pr.handle_beneficiary_reward(block, date, checker, brs, beneficiary_rewards)
                 trying = False
             except RPCError:
                 attempts += 1
