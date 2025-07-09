@@ -121,27 +121,18 @@ BEGIN
     FROM pending_post_percentiles p;
 
     IF min_created < max_created THEN
-		-- Create a temporary table for collecting all posts
-        DROP TEMPORARY TABLE IF EXISTS temp_post_joined;
-        CREATE TEMPORARY TABLE temp_post_joined AS
-		SELECT 
-            p.author,
-            p.permlink,
-            p.created,
-            IFNULL(ppp.total_value, 0) AS total_value -- Posts not in pending did not pay out and are therefore 0 dollars
-		FROM posts p
-        LEFT JOIN pending_post_percentiles ppp
-			ON p.author = ppp.author AND p.permlink = ppp.permlink
-		WHERE DATE(p.created) >= min_created AND DATE(p.created) < max_created;
-    
         -- Update all percentiles for posts on each date from min_created to max_created - 1
         UPDATE posts p
         JOIN (
             SELECT author, permlink, total_value, FLOOR(PERCENT_RANK() OVER (PARTITION BY DATE(created) ORDER BY total_value) * 100) AS percentile
-            FROM temp_post_joined
+            FROM pending_post_percentiles
             WHERE DATE(created) >= min_created AND DATE(created) < max_created
         ) ranked ON p.author = ranked.author AND p.permlink = ranked.permlink
         SET p.total_value = ranked.total_value, p.percentile = ranked.percentile;
+        
+		UPDATE posts 
+        SET total_value=0.00, percentile=0
+        WHERE created >= min_created AND created < max_created AND total_value IS NULL;
         
         -- Delete processed rows from pending_post_percentiles
         DELETE FROM pending_post_percentiles
