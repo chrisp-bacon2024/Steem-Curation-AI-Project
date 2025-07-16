@@ -47,14 +47,14 @@ Steem-Curation-AI-Project/
 
 ## 📚 Features
 
-- ✅ Full **MySQL schema** with referential integrity
-- ✅ Modular **stored procedures** for insertion, updates, and analytics
-- ✅ Triggers for live updates on reward and percentile data
-- ✅ Python scripts for:
+- Full **MySQL schema** with referential integrity
+- Modular **stored procedures** for insertion, updates, and analytics
+- Triggers for live updates on reward and percentile data
+- Python scripts for:
   - Pulling account, post, vote, and reward data from the Steem blockchain
   - Retrieving follower data from the Steem World API
   - Performing language analysis and text metrics
-- ✅ Integrated with historic **Steem price** data to compute post value in Steem (at the time of payout)
+- Integrated with historic **Steem price** data to compute post value in Steem (at the time of payout)
 
 ## 🧱 Technologies Used
 
