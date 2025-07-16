@@ -104,8 +104,9 @@ def count_spelling_errors(sentences:List[str], language_code:str) -> SpellcheckR
         d = enchant.Dict(language_code)
     total_words = 0
     error_count = 0
-
+    count = 0
     for sentence in sentences:
+        count += 1
         # Tokenize based on whitespace
         words = sentence.strip().split()
         # Clean basic punctuation
@@ -160,6 +161,12 @@ def process_html_by_language(html:str) -> Dict[str, LanguageEntry]:
         if not paragraph_text.strip():
             continue
 
+        # Remove markdown image links ![...](...)
+        paragraph_text = re.sub(r'!\[.*?\]\(.*?\)', '', paragraph_text)
+
+        # Remove bare image filenames or image URLs
+        paragraph_text = re.sub(r'https?://[^\s]*\.(jpg|jpeg|png|gif)', '', paragraph_text, flags=re.IGNORECASE)
+        paragraph_text = re.sub(r'\b[\w\-~]+\.(jpg|jpeg|png|gif)\b', '', paragraph_text, flags=re.IGNORECASE)
         sentences = split_sentences(paragraph_text)
         lang_counts = {}
         sentence_langs = []
@@ -185,8 +192,9 @@ def process_html_by_language(html:str) -> Dict[str, LanguageEntry]:
                 data[dominant_lang]['sentences'].append(sentence)
 
     # Spellcheck each language group
+    count = 0
     for lang_code, entry in data.items():
+        count += 1
         counts = count_spelling_errors(entry['sentences'], lang_code)
         entry.update(counts)
-
     return data
