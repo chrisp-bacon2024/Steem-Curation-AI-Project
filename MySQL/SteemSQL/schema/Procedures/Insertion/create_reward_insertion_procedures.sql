@@ -56,9 +56,6 @@ BEGIN
 
     -- Clean up
     DROP TEMPORARY TABLE temp_author_rewards;
-
-    -- Update rewards with value + steem
-    CALL update_value_and_steem_for_author_rewards();
 END $$
 DELIMITER ;
 
@@ -181,8 +178,6 @@ BEGIN
     WHERE cr.author IS NULL;
 
     DROP TEMPORARY TABLE temp_curation_rewards;
-    
-    CALL update_value_and_steem_for_curation_rewards();
 END $$
 DELIMITER ;
 
@@ -261,9 +256,6 @@ BEGIN
     WHERE br.author IS NULL;
 
     DROP TEMPORARY TABLE temp_beneficiary_rewards;
-
-    -- Recalculate value and steem
-    CALL update_value_and_steem_for_beneficiary_rewards();
 END $$
 DELIMITER ;
 
